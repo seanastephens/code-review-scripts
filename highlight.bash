@@ -7,10 +7,14 @@ BROWSER=google-chrome
 
 for file in $@ ; do
 
-	# Where does this come from? Right click on a request in chrome dev tools 
+	# Where does this come from? Right click on a request in chrome dev tools
 	# to find "copy as cURL."
+	#
+	# We need to --data-urlencode the source code itself, because things like
+	# '+' get lost otherwise.
 	curl 'https://tohtml.com/python/' \
-		--data "code_src=$(cat $file)&Submit=Highlight&style=default&type=python" \
+		--data "Submit=Highlight&style=default&type=python" \
+		--data-urlencode "code_src=$(cat $file)" \
 		> ${file}.html
 
 	html_files="${html_files} ${file}.html"
